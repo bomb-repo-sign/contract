@@ -1,0 +1,19 @@
+{
+  "preparedDate": "2026-10-30",
+  "kind": "Vendor-style standalone project package",
+  "productionContract": "contracts/RWAIOFT.sol",
+  "productionTokenSha256": "b0a8e0cae6efdd6a86ce2714d2597095662f64974a76a45f9c12a3296695e528",
+  "standardInput": "verify/RWAIOFT.input.json",
+  "productionSourceCount": 56,
+  "unchangedDependencySources": 55,
+  "compiler": "0.8.22+commit.4fc1097e",
+  "optimizerRuns": 200,
+  "viaIR": true,
+  "evmVersion": "paris",
+  "exactAuditMetadata": {
+    "useLiteralContent": true
+  },
+  "regression": "84 assertions repeated on local 56,97,1; all 252 executions pass",
+  "originalVendorLockfileUnchanged": true,
+  "note": "Root Hardhat config is vendor-identical and omits useLiteralContent; exact-bytecode audit reproduction uses the supplied Standard JSON."
+}

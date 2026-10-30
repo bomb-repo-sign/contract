@@ -1,0 +1,54 @@
+--- vendor-v3/contracts/RWAIOFT.sol
++++ no-admin-mint/contracts/RWAIOFT.sol
+@@ -14,24 +14,20 @@
+ import { IERC165 } from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
+ 
+ /// @title  RWAI
+-/// @notice LayerZero V2 OFT with no transfer controls.
+-/// @dev    no blacklist, pause or inspector. owner can mint until renounce. peers are write once, delegate follows owner.
++/// @notice LayerZero V2 OFT with no transfer controls or direct administrator mint.
++/// @dev    no blacklist, pause or inspector. peers are write once; delegate syncs on ownership acceptance.
+ contract RWAIOFT is OFT, Ownable2Step, ERC20Permit, ERC20Burnable, IERC165 {
+     uint256 public constant INITIAL_SUPPLY = 1e9 * 1e18;
+     uint256 public constant HOME_CHAIN_ID = 56;
+     uint256 public constant HOME_TESTNET_CHAIN_ID = 97;
+ 
+-    uint256 public ownerMinted;
+-
+     event Finalized();
+-    event Minted(address indexed to, uint256 amount);
+ 
+     error ZeroPeer();
+     error PeerLocked(uint32 eid);
+     error InspectorDisabled();
+     error TransferToToken();
+     error LengthMismatch();
+-    error ZeroAmount();
+     error AmountTooLarge(uint256 amountLD);
+ 
+     constructor(
+@@ -39,15 +35,6 @@
+         address admin
+     ) OFT("RWAI", "RWAI", lzEndpoint, admin) Ownable(admin) ERC20Permit("RWAI") {
+         if (isHomeChain()) _mint(admin, INITIAL_SUPPLY);
+-    }
+-
+-    // owner only, so it dies with renounceOwnership. counts this chain's mints, bridging never touches it
+-    function mint(address to, uint256 amount) external onlyOwner {
+-        if (amount == 0) revert ZeroAmount();
+-        if (to == address(this)) revert TransferToToken();
+-        ownerMinted += amount;
+-        _mint(to, amount);
+-        emit Minted(to, amount);
+     }
+ 
+     // holder pays out to many in one tx, only ever moves msg.sender's own balance
+@@ -121,7 +108,7 @@
+         endpoint.setDelegate(msg.sender);
+     }
+ 
+-    // renounce = config and mint frozen for good
++    // renounce freezes local configuration; existing bridge receive mint remains enabled
+     function renounceOwnership() public override onlyOwner {
+         endpoint.setDelegate(address(0));
+         super.renounceOwnership();
