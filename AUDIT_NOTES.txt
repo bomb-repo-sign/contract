@@ -1,0 +1,34 @@
+RWAI v3 minimal derivative for a NEW audit - prepared 2026-10-30
+
+Removed: mint(address,uint256), ownerMinted, Minted, unused ZeroAmount.
+Preserved: constructor genesis, authenticated OFT receive mint, owner-only new
+peer registration, write-once peers, two-step ownership/delegate behavior,
+renounce, permit, holder burn, transfers and v3 uint64 guards.
+
+No new governance, timelock, local supply ceiling, blacklist, pause, upgrade or
+rescue mechanism was introduced. All 55 dependency sources remain identical to
+vendor v3 and are embedded with the token in verify/RWAIOFT.input.json.
+
+The root deploy/config/package/dependency files retain the vendor behavior.
+SETUP.md is rewritten and optional blank overrides are commented out in
+.env.example. Root .env and node_modules are deliberately not included.
+
+Final regression evidence: 84 assertions repeated under local chain IDs 56, 97
+and 1, for 252 executions. The exact production Standard JSON compiled with
+Solidity 0.8.22 and zero warnings; tested creation/runtime bytecode matched that
+artifact. These are local mock tests, not real DVN, Executor, finality, Safe or
+live testnet verification. Counts do not represent 252 independent attacks.
+
+Important remaining trust assumptions: a malicious newly trusted peer or a
+compromised verification configuration can still produce unbacked bridge credit.
+Removing direct mint is not an unconditional global supply-cap proof. Genesis
+is created separately for each new BSC deployment; use one canonical token per
+production chain and separate mainnet/testnet. Review all owner/delegate rights
+and remote mint/upgrade rights before registering any new peer.
+
+renounceOwnership still prevents this token from adding new direct peers and
+managing its configuration. It cannot be reversed. Existing bridge receipt can
+continue. No renouncement was performed or is required by this modification.
+
+The prior vendor report does not automatically cover this derivative. This
+package is for independent audit submission, not audit or exchange approval.
