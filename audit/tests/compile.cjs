@@ -1,0 +1,43 @@
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+const assert = require('assert/strict');
+const { dependency, dependencies } = require('./runtime.cjs');
+const compiler = path.resolve(process.env.RWAI_TEST_SOLJSON || path.join(process.env.HOME, 'Library/Caches/hardhat-nodejs/compilers-v2/wasm/soljson-v0.8.22+commit.4fc1097e.js'));
+const solc = dependency('solc/wrapper')(require(compiler));
+assert(solc.version().startsWith('0.8.22+commit.4fc1097e.'), 'Unexpected compiler version');
+const sourceRoot = path.resolve(process.env.RWAI_SOURCE_ROOT || path.join(__dirname, '../..'));
+const sourcePath = path.join(sourceRoot, 'contracts/RWAIOFT.sol');
+const source = fs.readFileSync(sourcePath, 'utf8');
+const standardInputPath = path.resolve(process.env.RWAI_STANDARD_INPUT || path.join(__dirname, '../../verify/RWAIOFT.input.json'));
+const standardInputText = fs.readFileSync(standardInputPath, 'utf8');
+const productionInput = JSON.parse(standardInputText);
+const sources = productionInput.sources;
+const settings = productionInput.settings;
+assert.equal(sources['contracts/RWAIOFT.sol'].content, source, 'Standard input production source differs from requested source');
+for (const [sourceName, entry] of Object.entries(sources)) {
+  const candidates = [path.join(sourceRoot, sourceName), path.join(sourceRoot, 'node_modules', sourceName), path.join(dependencies, sourceName)];
+  const target = candidates.find(file => fs.existsSync(file));
+  assert(target, 'Source closure file missing: ' + sourceName);
+  assert.equal(fs.readFileSync(target, 'utf8'), entry.content, 'Source closure mismatch: ' + sourceName);
+}
+// Compile the authoritative production input verbatim, including metadata settings.
+const output = JSON.parse(solc.compile(standardInputText));
+assert(!(output.errors || []).some(error => error.severity === 'error'), JSON.stringify(output.errors));
+const expectedArtifactPath = path.resolve(process.env.RWAI_EXPECTED_ARTIFACT || path.join(__dirname, '../build/RWAIOFT.json'));
+const expected = JSON.parse(fs.readFileSync(expectedArtifactPath));
+const actual = output.contracts['contracts/RWAIOFT.sol'].RWAIOFT;
+const normalizedBytecode = code => code.replace(/^0x/, '');
+assert.equal(actual.evm.bytecode.object, normalizedBytecode(expected.bytecode || expected.evm.bytecode.object), 'Creation bytecode differs from authoritative artifact');
+assert.equal(actual.evm.deployedBytecode.object, normalizedBytecode(expected.deployedBytecode || expected.evm.deployedBytecode.object), 'Runtime bytecode differs from authoritative artifact');
+const fixtureSource = fs.readFileSync(path.join(__dirname, 'ReviewEndpoint.sol'), 'utf8');
+const fixtureSettings = { optimizer: settings.optimizer, viaIR: settings.viaIR, evmVersion: settings.evmVersion, metadata: settings.metadata, outputSelection: { '*': { '*': ['abi', 'evm.bytecode', 'evm.deployedBytecode'] } } };
+const fixtures = JSON.parse(solc.compile(JSON.stringify({ language: 'Solidity', sources: { 'ReviewEndpoint.sol': { content: fixtureSource } }, settings: fixtureSettings })));
+assert(!(fixtures.errors || []).some(error => error.severity === 'error'), JSON.stringify(fixtures.errors));
+const build = path.join(__dirname, 'build'); fs.mkdirSync(build, { recursive: true });
+fs.writeFileSync(path.join(build, 'RWAIOFT.json'), JSON.stringify(output.contracts['contracts/RWAIOFT.sol'].RWAIOFT, null, 2));
+fs.writeFileSync(path.join(build, 'ReviewEndpoint.json'), JSON.stringify(fixtures.contracts['ReviewEndpoint.sol'].ReviewEndpoint, null, 2));
+fs.writeFileSync(path.join(build, 'standard-input.json'), standardInputText);
+const metadata = { sourcePath, sourceSha256: crypto.createHash('sha256').update(source).digest('hex'), standardInputPath, standardInputSha256: crypto.createHash('sha256').update(standardInputText).digest('hex'), expectedArtifactPath, compiler: solc.version(), optimizerRuns: settings.optimizer.runs, viaIR: settings.viaIR, evmVersion: settings.evmVersion, metadataSettings: settings.metadata, creationBytecodeMatchesAuthoritative: true, runtimeBytecodeMatchesAuthoritative: true, productionSourceCount: Object.keys(sources).length, warnings: (output.errors || []).filter(error => error.severity === 'warning') };
+fs.writeFileSync(path.join(build, 'metadata.json'), JSON.stringify(metadata, null, 2));
+console.log(JSON.stringify(metadata, null, 2));
