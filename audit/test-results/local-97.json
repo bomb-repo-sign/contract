@@ -1,0 +1,395 @@
+{
+  "chainId": "97",
+  "sourceSha256": "b0a8e0cae6efdd6a86ce2714d2597095662f64974a76a45f9c12a3296695e528",
+  "compiler": "0.8.22+commit.4fc1097e.Emscripten.clang",
+  "provider": "in-process Hardhat",
+  "assertions": 84,
+  "allPassed": true,
+  "limits": "Local mock transport only; not real DVN, Executor, finality, Safe, or globally unique genesis validation. Both bridge fixtures are deployed on one local chain ID. Explicit mock seed is used on chain 1. Endpoint inject deliberately models trusted-message compromise.",
+  "residualRisk": "Trusted peer / fixed Endpoint can create authenticated-looking credit without source burn; not fixed by removing direct mint.",
+  "rows": [
+    {
+      "label": "execution uses only in-process Hardhat",
+      "passed": true
+    },
+    {
+      "label": "local chain ID is requested test ID",
+      "passed": true
+    },
+    {
+      "label": "tested artifact source hash matches current production source",
+      "passed": true
+    },
+    {
+      "label": "tested creation bytecode equals authoritative compiled artifact",
+      "passed": true
+    },
+    {
+      "label": "tested runtime bytecode equals authoritative compiled artifact",
+      "passed": true
+    },
+    {
+      "label": "no public admin mint function in production ABI",
+      "passed": true
+    },
+    {
+      "label": "obsolete ownerMinted getter is absent",
+      "passed": true
+    },
+    {
+      "label": "obsolete direct Minted event is absent",
+      "passed": true
+    },
+    {
+      "label": "standard transfer, burn, permit and OFT bridge functions remain",
+      "passed": true
+    },
+    {
+      "label": "no blacklist, pause or freeze was introduced",
+      "passed": true
+    },
+    {
+      "label": "genesis supply is 1B on local chain 56/97 and zero on chain 1",
+      "passed": true
+    },
+    {
+      "label": "ADMIN receives exactly genesis supply",
+      "passed": true
+    },
+    {
+      "label": "deployer receives no genesis tokens",
+      "passed": true
+    },
+    {
+      "label": "ADMIN is initial owner",
+      "passed": true
+    },
+    {
+      "label": "ADMIN is initial Endpoint delegate",
+      "passed": true
+    },
+    {
+      "label": "owner cannot invoke removed mint selector",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "deployment signer cannot invoke removed mint selector",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "ordinary account cannot invoke removed mint selector",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "removed mint calls leave supply and recipient balance unchanged",
+      "passed": true
+    },
+    {
+      "label": "nonowner cannot register a new peer",
+      "passed": true,
+      "expectedRevert": true,
+      "expectedError": "OwnableUnauthorizedAccount"
+    },
+    {
+      "label": "owner cannot register zero peer",
+      "passed": true,
+      "expectedRevert": true,
+      "expectedError": "ZeroPeer"
+    },
+    {
+      "label": "owner can add a previously unused chain EID",
+      "passed": true
+    },
+    {
+      "label": "owner cannot replace an existing peer",
+      "passed": true,
+      "expectedRevert": true,
+      "expectedError": "PeerLocked"
+    },
+    {
+      "label": "owner cannot delete an existing peer",
+      "passed": true,
+      "expectedRevert": true,
+      "expectedError": "ZeroPeer"
+    },
+    {
+      "label": "nonowner cannot assign delegate",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "owner can assign a separate Endpoint delegate",
+      "passed": true
+    },
+    {
+      "label": "delegate cannot directly invoke removed mint selector",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "delegate cannot add token peer",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "assigned delegate retains mock Endpoint configuration authority",
+      "passed": true
+    },
+    {
+      "label": "nonowner cannot nominate successor",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "ownership handoff waits for nominated account acceptance",
+      "passed": true
+    },
+    {
+      "label": "pending owner cannot add new peer",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "unrelated account cannot accept ownership",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "old owner retains peer administration until acceptance",
+      "passed": true
+    },
+    {
+      "label": "nominated successor becomes owner",
+      "passed": true
+    },
+    {
+      "label": "ownership acceptance synchronizes Endpoint delegate",
+      "passed": true
+    },
+    {
+      "label": "former owner cannot add peer",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "former delegate cannot configure mock Endpoint after handoff",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "new owner also cannot invoke removed mint selector",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "new owner can add another previously unused EID",
+      "passed": true
+    },
+    {
+      "label": "owner cannot install message inspector",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "ordinary caller cannot fake Endpoint receive",
+      "passed": true,
+      "expectedRevert": true,
+      "expectedError": "OnlyEndpoint"
+    },
+    {
+      "label": "fixed mock Endpoint cannot credit wrong peer",
+      "passed": true,
+      "expectedRevert": true,
+      "expectedError": "OnlyPeer"
+    },
+    {
+      "label": "fixed mock Endpoint cannot credit unregistered EID",
+      "passed": true,
+      "expectedRevert": true,
+      "expectedError": "NoPeer"
+    },
+    {
+      "label": "ordinary caller cannot invoke simulation directly",
+      "passed": true,
+      "expectedRevert": true,
+      "expectedError": "OnlySelf"
+    },
+    {
+      "label": "registered peer message through fixed mock Endpoint still mints bridge credit",
+      "passed": true
+    },
+    {
+      "label": "owner cannot seize holder balance without approval",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "nonowner cannot burn holder balance without approval",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "ordinary ERC20 transfer remains functional",
+      "passed": true
+    },
+    {
+      "label": "approved transfer consumes allowance",
+      "passed": true
+    },
+    {
+      "label": "holder burn and approved burnFrom reduce supply correctly",
+      "passed": true
+    },
+    {
+      "label": "failed batch transfer is atomic",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "failed batch preserves balance",
+      "passed": true
+    },
+    {
+      "label": "valid batch transfers only holder balances",
+      "passed": true
+    },
+    {
+      "label": "ordinary transfer to token itself remains blocked",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "forged permit fails",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "valid permit updates allowance and nonce",
+      "passed": true
+    },
+    {
+      "label": "permit signature cannot replay",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "renounce clears owner and pending owner",
+      "passed": true
+    },
+    {
+      "label": "renounce clears Endpoint delegate",
+      "passed": true
+    },
+    {
+      "label": "former owner cannot add chain after renounce",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "renounce cancels pending ownership acceptance",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "former owner cannot restore delegate after renounce",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "former owner cannot invoke removed mint after renounce",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "previous peer remains registered after renounce",
+      "passed": true
+    },
+    {
+      "label": "ordinary transfers continue after renounce",
+      "passed": true
+    },
+    {
+      "label": "previously registered bridge receive continues after renounce",
+      "passed": true
+    },
+    {
+      "label": "send burns exact source amount before delivery",
+      "passed": true
+    },
+    {
+      "label": "destination supply is unchanged while packet is in flight",
+      "passed": true
+    },
+    {
+      "label": "source plus destination plus in-flight amount is conserved",
+      "passed": true
+    },
+    {
+      "label": "delivery credits exact receiver amount",
+      "passed": true
+    },
+    {
+      "label": "completed bridge conserves combined local fixture supply",
+      "passed": true
+    },
+    {
+      "label": "mock transport rejects already delivered packet",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "round trip restores source holder balance and zero destination holder balance",
+      "passed": true
+    },
+    {
+      "label": "round trip conserves combined fixture supply",
+      "passed": true
+    },
+    {
+      "label": "non-bridgeable dust remains at source",
+      "passed": true
+    },
+    {
+      "label": "transport failure reverts complete send",
+      "passed": true,
+      "expectedRevert": true
+    },
+    {
+      "label": "failed send restores source supply and balance",
+      "passed": true
+    },
+    {
+      "label": "quoteOFT keeps v3 uint64 guard",
+      "passed": true,
+      "expectedRevert": true,
+      "expectedError": "AmountTooLarge"
+    },
+    {
+      "label": "quoteSend keeps v3 uint64 guard",
+      "passed": true,
+      "expectedRevert": true,
+      "expectedError": "AmountTooLarge"
+    },
+    {
+      "label": "send keeps v3 uint64 guard",
+      "passed": true,
+      "expectedRevert": true,
+      "expectedError": "AmountTooLarge"
+    },
+    {
+      "label": "oversized attempts preserve supply and balance",
+      "passed": true
+    },
+    {
+      "label": "existing bidirectional bridge continues after both owners renounce",
+      "passed": true
+    },
+    {
+      "label": "residual risk: trusted mock message can inflate supply without source burn",
+      "passed": true
+    }
+  ]
+}

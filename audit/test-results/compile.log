@@ -1,0 +1,18 @@
+{
+  "sourcePath": "/Users/bomb/Documents/Codex/2026-10-22/wlrm/outputs/RWAI-v3-no-admin-mint/contracts/RWAIOFT.sol",
+  "sourceSha256": "b0a8e0cae6efdd6a86ce2714d2597095662f64974a76a45f9c12a3296695e528",
+  "standardInputPath": "/Users/bomb/Documents/Codex/2026-10-22/wlrm/work/v3-no-mint-validation/standard-input.json",
+  "standardInputSha256": "d4d6d51b2a9fbf1849cd29588382effb9cbf0326482be519ff0370a47ab1d2a2",
+  "expectedArtifactPath": "/Users/bomb/Documents/Codex/2026-10-22/wlrm/work/v3-no-mint-validation/RWAIOFT.json",
+  "compiler": "0.8.22+commit.4fc1097e.Emscripten.clang",
+  "optimizerRuns": 200,
+  "viaIR": true,
+  "evmVersion": "paris",
+  "metadataSettings": {
+    "useLiteralContent": true
+  },
+  "creationBytecodeMatchesAuthoritative": true,
+  "runtimeBytecodeMatchesAuthoritative": true,
+  "productionSourceCount": 56,
+  "warnings": []
+}

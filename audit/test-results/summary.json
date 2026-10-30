@@ -1,0 +1,35 @@
+{
+  "outcome": "PASS",
+  "preparedDate": "2026-10-30",
+  "variant": "Vendor v3 without direct administrator mint",
+  "productionSourceCount": 56,
+  "unchangedDependencySources": 55,
+  "sourceSha256": "b0a8e0cae6efdd6a86ce2714d2597095662f64974a76a45f9c12a3296695e528",
+  "compiler": "0.8.22+commit.4fc1097e.Emscripten.clang",
+  "compilerWarnings": 0,
+  "exactExecutableChangeOnlyMintRemoval": true,
+  "exactAbiRemovalOnly": true,
+  "testedCreationAndRuntimeMatchAuthoritativeBuild": true,
+  "distinctAssertionsPerLocalChain": 84,
+  "localRuns": [
+    {
+      "chainId": 56,
+      "assertions": 84,
+      "allPassed": true
+    },
+    {
+      "chainId": 97,
+      "assertions": 84,
+      "allPassed": true
+    },
+    {
+      "chainId": 1,
+      "assertions": 84,
+      "allPassed": true
+    }
+  ],
+  "totalRepeatedLocalExecutions": 252,
+  "protectedVendorV3SourceUnchanged": true,
+  "limits": "Local mocked transport. No real DVN, Executor, finality, Safe, public-chain deployment or live testnet. No external audit or exchange approval.",
+  "remainingTrustRisk": "Trusted malicious peer or compromised verification configuration may produce unbacked bridge mint. Owner/delegate still control new routes/configuration. No unconditional global supply cap claim."
+}

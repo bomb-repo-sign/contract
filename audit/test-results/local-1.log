@@ -1,0 +1,86 @@
+PASS execution uses only in-process Hardhat
+PASS local chain ID is requested test ID
+LIMITS: local test signers and mock Endpoint; no real DVN, Executor, finality, Safe or live RPC verification.
+PASS tested artifact source hash matches current production source
+PASS tested creation bytecode equals authoritative compiled artifact
+PASS tested runtime bytecode equals authoritative compiled artifact
+PASS no public admin mint function in production ABI
+PASS obsolete ownerMinted getter is absent
+PASS obsolete direct Minted event is absent
+PASS standard transfer, burn, permit and OFT bridge functions remain
+PASS no blacklist, pause or freeze was introduced
+PASS genesis supply is 1B on local chain 56/97 and zero on chain 1
+PASS ADMIN receives exactly genesis supply
+PASS deployer receives no genesis tokens
+PASS ADMIN is initial owner
+PASS ADMIN is initial Endpoint delegate
+PASS rejected owner cannot invoke removed mint selector
+PASS rejected deployment signer cannot invoke removed mint selector
+PASS rejected ordinary account cannot invoke removed mint selector
+PASS removed mint calls leave supply and recipient balance unchanged
+PASS rejected nonowner cannot register a new peer
+PASS rejected owner cannot register zero peer
+PASS owner can add a previously unused chain EID
+PASS rejected owner cannot replace an existing peer
+PASS rejected owner cannot delete an existing peer
+PASS rejected nonowner cannot assign delegate
+PASS owner can assign a separate Endpoint delegate
+PASS rejected delegate cannot directly invoke removed mint selector
+PASS rejected delegate cannot add token peer
+PASS assigned delegate retains mock Endpoint configuration authority
+PASS rejected nonowner cannot nominate successor
+PASS ownership handoff waits for nominated account acceptance
+PASS rejected pending owner cannot add new peer
+PASS rejected unrelated account cannot accept ownership
+PASS old owner retains peer administration until acceptance
+PASS nominated successor becomes owner
+PASS ownership acceptance synchronizes Endpoint delegate
+PASS rejected former owner cannot add peer
+PASS rejected former delegate cannot configure mock Endpoint after handoff
+PASS rejected new owner also cannot invoke removed mint selector
+PASS new owner can add another previously unused EID
+PASS rejected owner cannot install message inspector
+PASS rejected ordinary caller cannot fake Endpoint receive
+PASS rejected fixed mock Endpoint cannot credit wrong peer
+PASS rejected fixed mock Endpoint cannot credit unregistered EID
+PASS rejected ordinary caller cannot invoke simulation directly
+PASS registered peer message through fixed mock Endpoint still mints bridge credit
+PASS rejected owner cannot seize holder balance without approval
+PASS rejected nonowner cannot burn holder balance without approval
+PASS ordinary ERC20 transfer remains functional
+PASS approved transfer consumes allowance
+PASS holder burn and approved burnFrom reduce supply correctly
+PASS rejected failed batch transfer is atomic
+PASS failed batch preserves balance
+PASS valid batch transfers only holder balances
+PASS rejected ordinary transfer to token itself remains blocked
+PASS rejected forged permit fails
+PASS valid permit updates allowance and nonce
+PASS rejected permit signature cannot replay
+PASS renounce clears owner and pending owner
+PASS renounce clears Endpoint delegate
+PASS rejected former owner cannot add chain after renounce
+PASS rejected renounce cancels pending ownership acceptance
+PASS rejected former owner cannot restore delegate after renounce
+PASS rejected former owner cannot invoke removed mint after renounce
+PASS previous peer remains registered after renounce
+PASS ordinary transfers continue after renounce
+PASS previously registered bridge receive continues after renounce
+PASS send burns exact source amount before delivery
+PASS destination supply is unchanged while packet is in flight
+PASS source plus destination plus in-flight amount is conserved
+PASS delivery credits exact receiver amount
+PASS completed bridge conserves combined local fixture supply
+PASS rejected mock transport rejects already delivered packet
+PASS round trip restores source holder balance and zero destination holder balance
+PASS round trip conserves combined fixture supply
+PASS non-bridgeable dust remains at source
+PASS rejected transport failure reverts complete send
+PASS failed send restores source supply and balance
+PASS rejected quoteOFT keeps v3 uint64 guard
+PASS rejected quoteSend keeps v3 uint64 guard
+PASS rejected send keeps v3 uint64 guard
+PASS oversized attempts preserve supply and balance
+PASS existing bidirectional bridge continues after both owners renounce
+PASS residual risk: trusted mock message can inflate supply without source burn
+TOTAL ASSERTIONS 84 ALL PASSED
