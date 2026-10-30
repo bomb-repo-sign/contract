@@ -1,0 +1,20 @@
+'use strict';
+const fs=require('fs'),path=require('path'),crypto=require('crypto'),assert=require('assert/strict');
+const root=path.resolve(__dirname,'../..');
+const compiler=path.resolve(process.argv[2] || process.env.RWAI_TEST_SOLJSON || '');
+const digest=data=>crypto.createHash('sha256').update(data).digest('hex');
+assert.equal(digest(fs.readFileSync(compiler)),'92d283c545395b91a656fa1ec94d567a464bca55aebcdbb99debf42b43026845','Wrong compiler file');
+const modules=path.resolve(process.env.RWAI_TEST_NODE_MODULES || path.join(root,'node_modules'));
+const solc=require(path.join(modules,'solc/wrapper'))(require(compiler));
+assert(solc.version().startsWith('0.8.22+commit.4fc1097e.'));
+const input=JSON.parse(fs.readFileSync(path.join(root,'verify/RWAIOFT.input.json'),'utf8'));
+const sourceRoot=path.resolve(process.env.RWAI_SOURCE_ROOT || root);
+for(const [name,entry] of Object.entries(input.sources)){ const target=[path.join(sourceRoot,name),path.join(modules,name)].find(p=>fs.existsSync(p)); assert(target,'Missing source: '+name); assert.equal(fs.readFileSync(target,'utf8'),entry.content,'Source/input mismatch: '+name); }
+const output=JSON.parse(solc.compile(JSON.stringify(input)));
+assert(!(output.errors || []).some(x=>x.severity==='error'),JSON.stringify(output.errors));
+const actual=output.contracts['contracts/RWAIOFT.sol'].RWAIOFT;
+const expected=JSON.parse(fs.readFileSync(path.join(root,'audit/build/RWAIOFT.json'),'utf8'));
+assert.equal('0x'+actual.evm.bytecode.object,expected.bytecode,'Creation bytecode mismatch');
+assert.equal('0x'+actual.evm.deployedBytecode.object,expected.deployedBytecode,'Runtime template mismatch');
+assert.deepEqual(actual.abi,expected.abi,'ABI mismatch');
+console.log(JSON.stringify({outcome:'PASS',compiler:solc.version(),sources:Object.keys(input.sources).length,creationBytes:actual.evm.bytecode.object.length/2,runtimeBytes:actual.evm.deployedBytecode.object.length/2,abiAndBytecodeIdentical:true,warnings:(output.errors||[]).filter(x=>x.severity==='warning').length},null,2));
